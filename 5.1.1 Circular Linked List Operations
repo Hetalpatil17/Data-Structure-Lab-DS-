@@ -34,3 +34,168 @@ NODE createCLL(int n) {
 		if (first == NULL) {
 			first = newNode;
 			newNode->next = first;
+			temp = first;
+		} while (temp != first);
+	printf("\n");
+		
+
+
+
+}
+
+// Insert at given position in CLL
+NODE insertAtPositionInCLL(NODE first, int pos, int x) {
+int count = 0;
+	NODE temp = first;
+
+	if (first == NULL && pos != 1) {
+		printf("Position not found\n");
+		return first;
+	}
+
+	if (first != NULL) {
+		do {
+			count++;
+			temp = temp->next;
+		} while (temp != first);
+	}
+
+	if (pos < 1 || pos > count + 1) {
+		printf("Position not found\n");
+		return first;
+	}
+
+	NODE newNode = (NODE)malloc(sizeof(struct node));
+	newNode->data = x;
+
+	if (pos == 1) {
+		if (first == NULL) {
+			newNode->next = newNode;
+			return newNode;
+		}
+
+		NODE last = first;
+		while (last->next != first)
+			last = last->next;
+
+		newNode->next = first;
+		last->next = newNode;
+		return newNode;
+	}
+	temp = first;
+
+	newNode->next = temp->next;
+	temp->next = newNode;
+
+	return first;
+
+
+	
+}
+
+// Delete node at given position in CLL
+NODE deleteAtPositionInCLL(NODE first, int pos) {
+if (first == NULL) {
+		printf("CLL is empty\n");
+		return NULL;
+}
+
+	int count = 0;
+	NODE temp = first;
+
+	do {
+		count++;
+		temp = temp->next;
+		} while (temp != first);
+
+	if (pos < 1 || pos > count) {
+		printf("Position not found\n");
+		return first;
+	}
+
+	NODE deleteNode;
+
+
+	if (pos == 1) {
+		if (first->next == first) {
+			printf("Deleted elements: %d\n", first->data);
+			free(first);
+			return NULL;
+		}
+
+		NODE last = first;
+		while (last->next != first)
+			last = last->next;
+
+		deleteNode = first;
+		printf("Deleted element: %d\n", deleteNode->data);
+
+		last->next = first->next;
+		first = first->next;
+		free(deleteNode);
+		return first;
+	}
+
+    int x, pos, op, n;
+
+    while (1) {
+        printf("1.Create 2.Insert 3.Delete 4.Display 5.Reverse 6.Concat 7.Exit\n");
+        printf("choice: ");
+        scanf("%d", &op);
+        switch (op) {
+            case 1:
+                printf("How many nodes? ");
+                scanf("%d", &n);
+                first = createCLL(n);
+                break;
+            case 2:
+                printf("Position: ");
+                scanf("%d", &pos);
+                if (pos <= 0) {
+                    printf("Position not found\n");
+                } else {
+                    printf("Element: ");
+                    scanf("%d", &x);
+                    first = insertAtPositionInCLL(first, pos, x);
+                }
+                break;
+            case 3:
+                if (first == NULL) {
+                    printf("CLL is empty\n");
+                } else {
+                    printf("Position: ");
+                    scanf("%d", &pos);
+                    first = deleteAtPositionInCLL(first, pos);
+                }
+                break;
+            case 4:
+                if (first == NULL) {
+                    printf("CLL is empty\n");
+                } else {
+                    printf("Elements in CLL are: ");
+                    traverseListInCLL(first);
+                }
+                break;
+            case 5:
+                if (first == NULL) {
+                    printf("CLL is empty\n");
+                } else {
+                    first = reverseCLL(first);
+                    printf("CLL reversed\n");
+                    traverseListInCLL(first);   // <-- display reversed list
+                }
+                break;
+            case 6:
+                printf("Creating second CLL to concatenate...\n");
+                printf("How many nodes in second CLL? ");
+                scanf("%d", &n);
+                second = createCLL(n);
+                first = concatCLL(first, second);
+                printf("Concatenated CLL:\n");
+                traverseListInCLL(first);
+                break;
+            case 7:
+                exit(0);
+        }
+    }
+}
